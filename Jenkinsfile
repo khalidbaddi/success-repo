@@ -32,10 +32,18 @@ pipeline {
 
             steps{
                 script{
-                     withSonarQubeEnv(credentialsId: 'sonar') {
-                      sh 'mvn clean package sonar:sonar'
-                }
+                   withSonarQubeEnv(credentialsId: 'sonar') {
+                    sh 'mvn clean package sonar:sonar'   
+                }  
               }
+            }
+        }
+        stage('QUALITY GATE STATUS'){
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
+
+                }
             }
         }
     }
